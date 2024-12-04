@@ -1,0 +1,92 @@
+---
+title: "Final Project STAT-615"
+author: "Maxwell Miller-Golub"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readr)
+```
+
+```{r data}
+# Set current working directory to same folder that houses data file if you havent done so already.
+
+local_filename <- "Salary Prediction of Data Professions.csv"
+
+Salary_Prediction_of_Data_Professions <- read_csv(local_filename)
+
+view(Salary_Prediction_of_Data_Professions)
+```
+
+# Petro's Section
+
+### 1)	Offer a preliminary description of the data set. For example, indicate the size of the data source, describe the variables, and include any other data profile information that would be of interest.
+
+```{r final_project1}
+```
+
+### 2)	Generate relevant data visual plots that explore multicollinearity for the quantitative variables and normality for the quantitative variables as well.  Also, use R code to confirm the levels of the categorical variables.
+
+```{r final_project2}
+```
+
+
+### 3)	Using R code, produce a full Regression Model that consists of quantitative and categorical variables.  Make use of the R generated dummy variable matrices 
+
+```{r final_project3}
+```
+
+
+
+# Max's Section
+
+
+### 4)	Using only the quantitative variables as predictors, produce a model using matrix methods. Also use matrix methods to find the fitted values and the residuals
+
+```{r final_project4}
+# Finding a subsection of the data that is solely quantative 
+quantative_model <- Salary_Prediction_of_Data_Professions %>% 
+  select(SALARY, AGE, `PAST EXP`, `LEAVES USED`)
+
+# Eliminating cases with na values to prep for matrix
+complete_dataset <- quantative_model[complete.cases(quantative_model),]
+
+```
+
+
+### 5)	Produce an output summary table to be used to analyze and evaluate the full model (Adjusted R squared, Standard Error, Significance of Variables, ect…)
+
+```{r final_project5}
+
+```
+
+
+### 6)	Use procedures and techniques explored in class to produce confidence intervals for the independent quantitative variables of your model. Choose at least two of the quantitative variables to find confidence intervals for.
+
+```{r final_project6}
+
+```
+
+# Conie's Section
+
+
+### 7)	Now produce a reduced model (removing variables of your choice with justification). Use R summary coding for both models and offer justification for choosing one model over the other.
+
+```{r final_project7}
+```
+
+
+### 8)	Research and apply a model analysis technique not discussed in class to your full model or reduced model.  Fully explain the technique or procedure and how it is being applied to your specific model.
+
+```{r final_project8}
+```
+
+
+### 9)	Offer final summary perspectives about the data and the models that you produce, suggesting how your models or model analysis enhanced your understanding of the data.   (4 or 5 sentences)
+
+```{r final_project9}
+```
+
