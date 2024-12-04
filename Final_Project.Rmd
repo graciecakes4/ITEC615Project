@@ -91,9 +91,13 @@ head(fitted)
 ### 5)	Produce an output summary table to be used to analyze and evaluate the full model (Adjusted R squared, Standard Error, Significance of Variables, ect…)
 
 ```{r final_project5}
+full_model_prep <- Salary_Prediction_of_Data_Professions %>% 
+  select(SALARY, AGE, SEX, DESIGNATION, UNIT, `PAST EXP`, `LEAVES USED`, RATINGS)
 
+full_model <- lm(SALARY ~ AGE + SEX + DESIGNATION + UNIT + `PAST EXP` + `LEAVES USED` + RATINGS, data = full_model_prep)
+summary(full_model)
 ```
-
+Age (p < 0.05) and Job Designation (p < 0.00001) are both statistically significant, indicating a very high probability that the change seen in the response (salary) is not due to chance alone.
 
 ### 6)	Use procedures and techniques explored in class to produce confidence intervals for the independent quantitative variables of your model. Choose at least two of the quantitative variables to find confidence intervals for.
 
