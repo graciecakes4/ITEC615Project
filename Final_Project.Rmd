@@ -47,13 +47,44 @@ view(Salary_Prediction_of_Data_Professions)
 ### 4)	Using only the quantitative variables as predictors, produce a model using matrix methods. Also use matrix methods to find the fitted values and the residuals
 
 ```{r final_project4}
-# Finding a subsection of the data that is solely quantative 
+# Finding a subsection of the data that is solely quantitative 
 quantative_model <- Salary_Prediction_of_Data_Professions %>% 
   select(SALARY, AGE, `PAST EXP`, `LEAVES USED`)
 
 # Eliminating cases with na values to prep for matrix
 complete_dataset <- quantative_model[complete.cases(quantative_model),]
 
+quant_model <- lm(SALARY ~ AGE + `PAST EXP` + `LEAVES USED`, data = complete_dataset)
+#summary(quant_model)
+
+# Age has the highest t value so this is the predictor variable we will use with the matrices
+
+# Creating a matrix for AGE (predictor) with a column of "1s"
+quantitative_predictor_with_dummy <- complete_dataset %>% 
+  mutate(DUMMY = 1) %>% 
+  select(DUMMY, AGE)
+  
+x_matrix <- as.matrix(quantitative_predictor_with_dummy)
+
+# Creating a matrix for the response variable
+quantitative_response <- complete_dataset %>% 
+  select(SALARY)
+
+y_matrix <- as.matrix(quantitative_response)
+
+# Find Slope and Intercept
+solve(t(x_matrix)%*%x_matrix)%*%t(x_matrix)%*%y_matrix -> intercept_and_slope
+intercept_and_slope
+
+# Find Residual Values
+residuals <- y_matrix -  x_matrix %*% intercept_and_slope
+head(residuals)
+
+# Find Fitted values
+fitted <- x_matrix %*% intercept_and_slope
+head(fitted)
+
+#lm(y_matrix ~ x_matrix)
 ```
 
 
