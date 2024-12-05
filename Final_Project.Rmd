@@ -7,6 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+options(scipen = 1000)
 library(tidyverse)
 library(readr)
 ```
@@ -48,29 +49,47 @@ view(Salary_Prediction_of_Data_Professions)
 
 ```{r final_project4}
 # Finding a subsection of the data that is solely quantitative 
+
 quantative_model <- Salary_Prediction_of_Data_Professions %>% 
   select(SALARY, AGE, `PAST EXP`, `LEAVES USED`)
 
 # Eliminating cases with na values to prep for matrix
+
 complete_dataset <- quantative_model[complete.cases(quantative_model),]
 
 quant_model <- lm(SALARY ~ AGE + `PAST EXP` + `LEAVES USED`, data = complete_dataset)
+quant_model2 <- lm(SALARY ~ AGE, data = complete_dataset)
 #summary(quant_model)
+#x <- complete_dataset$AGE
+#y <- complete_dataset$SALARY
+
+ggplot(complete_dataset)+
+  geom_point(aes(AGE, SALARY))
+ggplot(complete_dataset)+
+  geom_point(aes(`PAST EXP`, SALARY))
 
 # Age has the highest t value so this is the predictor variable we will use with the matrices
 
 # Creating a matrix for AGE (predictor) with a column of "1s"
+
 quantitative_predictor_with_dummy <- complete_dataset %>% 
-  mutate(DUMMY = 1) %>% 
-  select(DUMMY, AGE)
+  mutate(INTERCEPT = 1) %>% 
+  select(INTERCEPT, AGE)
   
 x_matrix <- as.matrix(quantitative_predictor_with_dummy)
+#head(x_matrix)
 
 # Creating a matrix for the response variable
+
 quantitative_response <- complete_dataset %>% 
   select(SALARY)
 
 y_matrix <- as.matrix(quantitative_response)
+#head(y_matrix)
+
+#t(x) -> Transpose of x
+#%*% -> row column multiplication
+#solve(x) -> inverse of x
 
 # Find Slope and Intercept
 solve(t(x_matrix)%*%x_matrix)%*%t(x_matrix)%*%y_matrix -> intercept_and_slope
@@ -84,7 +103,8 @@ head(residuals)
 fitted <- x_matrix %*% intercept_and_slope
 head(fitted)
 
-#lm(y_matrix ~ x_matrix)
+plot(fitted, residuals)
+abline(h = 0, col = "blue")
 ```
 
 
