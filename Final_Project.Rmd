@@ -12,7 +12,7 @@ library(readr)
 ```
 
 ```{r data}
-# Set current working directory to same folder that houses data file if you havent done so already.
+# Set current working directory to same folder that houses data file if you haven't done so already.
 
 local_filename <- "Salary Prediction of Data Professions.csv"
 
@@ -102,7 +102,16 @@ Age (p < 0.05) and Job Designation (p < 0.00001) are both statistically signific
 ### 6)	Use procedures and techniques explored in class to produce confidence intervals for the independent quantitative variables of your model. Choose at least two of the quantitative variables to find confidence intervals for.
 
 ```{r final_project6}
+# calculation t scores
+qt(p = 0.025, df = 2632 , lower.tail = FALSE) -> t_score
 
+# calculate Past Exp confidence intervals
+past_exp_UB <- -260.78 + t_score*154.69
+past_exp_LB <- -260.78 - t_score*154.69
+
+# calculate Age confidence interval
+age_UB <- 285.76 + t_score*144.59
+age_LB <- 285.76 - t_score*144.59
 ```
 
 # Conie's Section
@@ -111,6 +120,19 @@ Age (p < 0.05) and Job Designation (p < 0.00001) are both statistically signific
 ### 7)	Now produce a reduced model (removing variables of your choice with justification). Use R summary coding for both models and offer justification for choosing one model over the other.
 
 ```{r final_project7}
+# stepwise regression
+sw_intercept <- lm(SALARY ~ 1, data=full_model_prep)
+sw_intercept
+
+# define model with all predictors
+sw_all <- full_model
+sw_all
+
+#perform forward stepwise regression
+sw_forward <- step(sw_intercept, direction='forward', scope=formula(sw_all), trace=0)
+sw_forward
+
+sw_forward$anova
 ```
 
 
