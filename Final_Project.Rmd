@@ -167,8 +167,12 @@ After reviewing the summary statistics of the full model, we can remove the vari
 ```
 
 
-### 9)	Offer final summary perspectives about the data and the models that you produce, suggesting how your models or model analysis enhanced your understanding of the data.   (4 or 5 sentences)
+### 9)	Offer final summary perspectives about the data and the models that you produce, suggesting how your models or model analysis enhanced your understanding of the data. (4 or 5 sentences)
 
 ```{r final_project9}
 ```
-
+<center>Our Changing Perspectives</center>
+Our first full model gives us a wide view of the data and includes a number of variables that we would conventionally associate with salary, like Age, Sex, Past Experience, Designation. After analyzing the summary statistics of the data, we can see that most of these variables are not statistically significant to predicting the salaries of data science professionals from this data set. Even after keeping the statistically significant variables, our reduced model proved to eliminate further variables, leaving only Designation as a statistically significant predictor of salary. 
+<br><br>
+<center>What does this mean?</center>
+This means that our data set is potentially too narrow. Even though we have over 2600 entries, this may not be a large enough sample size to overcome the effects of the designation variable. In a deeper investigation, we may need to gather data from other sources to see if the Designation (which we may term as any sort of job level variable) is a powerful indicator across the board in this industry, or if this is a result of our data selection.
