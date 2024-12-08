@@ -156,7 +156,7 @@ full_model_prep <- Salary_Prediction_of_Data_Professions %>%
 full_model <- lm(SALARY ~ AGE + SEX + DESIGNATION + UNIT + `PAST EXP` + `LEAVES USED` + RATINGS, data = full_model_prep)
 summary(full_model)
 ```
-Age (p < 0.05) and Job Designation (p < 0.00001) are both statistically significant, indicating a very high probability that the change seen in the response (salary) is not due to chance alone.
+<div class="main-text">Age (p < 0.05) and Job Designation (p < 0.00001) are both statistically significant, indicating a very high probability that the change seen in the response (salary) is not due to chance alone.</div>
 
 ##
 Use procedures and techniques explored in class to produce confidence intervals for the independent quantitative variables of your model. Choose at least two of the quantitative variables to find confidence intervals for.
@@ -200,22 +200,48 @@ sw_forward <- step(sw_intercept, direction = 'forward', scope = formula(sw_all),
 sw_forward$anova
 ```
 
-After reviewing the summary statistics of the full model, we can remove the variables Unit, Past Exp, Leaves Used, and Sex because none are statistically significant. For all variables, p > 0.05. We can reduce the model to include only Age and Designation, who are significant because p < 0.05 in the full model. After reducing the model, we see that the only significant variable is Designation - Age now has p > 0.05. After running a stepwise regression to confirm the outputs, our final reduced model only includes the indicator variable Designation.
+<div class="main-text">After reviewing the summary statistics of the full model, we can remove the variables Unit, Past Exp, Leaves Used, and Sex because none are statistically significant. For all variables, p > 0.05. We can reduce the model to include only Age and Designation, who are significant because p < 0.05 in the full model. After reducing the model, we see that the only significant variable is Designation - Age now has p > 0.05. After running a stepwise regression to confirm the outputs, our final reduced model only includes the indicator variable Designation.</div>
 
 
 ##
 Research and apply a model analysis technique not discussed in class to your full model or reduced model.  Fully explain the technique or procedure and how it is being applied to your specific model.
 
 ```{r final_project8}
+# Remove rows with missing values
+data_cleaned <- na.omit(full_model_prep[c("AGE", "SALARY", "DESIGNATION", "LEAVES USED", "RATINGS", "PAST EXP",
+                                          "RATINGS", "UNIT")])
 
+data_cleaned$DESIGNATION <- as.factor(data_cleaned$DESIGNATION)
+data_cleaned$UNIT <- as.factor(data_cleaned$UNIT)
+
+# Fit a polynomial regression model (degree = 2)
+polymodel <- lm(SALARY ~ poly(AGE, 2) + DESIGNATION +  poly(UNIT, 2) + poly(`PAST EXP`, 2) +
+                  poly(`LEAVES USED`, 2) + poly(RATINGS, 2), data = data_cleaned)
+summary(polymodel)
+
+# perform a stepwise regression with the polynomial model
+sw_poly_intercept <- lm(SALARY ~ 1, data = data_cleaned)
+sw_poly_forward <- step(sw_poly_intercept, direction = 'forward', scope = formula(polymodel), trace = 0)
+sw_poly_forward$anova
+
+# build a final reduced model and review summary statistics
+final_polymodel <- lm(SALARY ~ DESIGNATION + poly(AGE, 2) + poly (`PAST EXP`, 2), data = data_cleaned)
+final_polymodel
+summary(final_polymodel)
 ```
 
+<div class="header-text"><center>Polynomial Model</center></div><br><br>
+<div class="main-text">I applied a polynomial model and combined it with a stepwise regression to address the nonlinear relationships of other variables (Age, Past Exp, etc.). <br><br>
+1. Data Prep - I had to clean the data a little further by removing any NA values and then factoring the categorical variables (Designation and Unit) before building a polynomial model. <br><br>
+2. Model Adjustment - Since Designation was statistically significant as a linear variable, I did not adjust it to a polynomial. All other variables I changed to polynomials and created a model. <br><br>
+3. Model Assessment & Tuning - After creating the model and running summary statistics, Age and Past Exp were now statistically significant (p < 0.05) and the model explained the variation in Salary well (Adjusted R-squared = 0.9546). However, there were a number of insignificant terms (p > 0.05). I performed a stepwise regression to confirm the best predictor variables, which were Designation, Age^2, and Past Exp^2. I then built a reduced model and computed the summary statistics to confirm significance of all variables - all variables were significant (p < 0.05) and the model had an Adjusted R-squared value of 0.9543.<br><br>
+4. Final Model <br><br> <center>y = B0 + (B1 * DESIGNATION) + (B2 * AGE) + (B3 * AGE)^2 + (B4 * PAST EXP) + (B5 * PAST EXP)^2 + e </center></div>
 
 ##
 Offer final summary perspectives about the data and the models that you produce, suggesting how your models or model analysis enhanced your understanding of the data. (4 or 5 sentences)
 
-<center>Our Changing Perspectives</center>
-Our first full model gives us a wide view of the data and includes a number of variables that we would conventionally associate with salary, like Age, Sex, Past Experience, Designation. After analyzing the summary statistics of the data, we can see that most of these variables are not statistically significant to predicting the salaries of data science professionals from this data set. Even after keeping the statistically significant variables, our reduced model proved to eliminate further variables, leaving only Designation as a statistically significant predictor of salary. 
+<div class="header-text"><center>Our Changing Perspectives</center></div>
+<div class="main-text">Our first full model gives us a wide view of the data and includes a number of variables that we would conventionally associate with salary, like Age, Sex, Past Experience, Designation. After analyzing the summary statistics of the data, we can see that most of these variables are not statistically significant to predicting the salaries of data science professionals from this data set. Even after keeping the statistically significant variables, our reduced model proved to eliminate further variables, leaving only Designation as a statistically significant predictor of salary. Using a polynomial model allowed us to better fit a model to the data that we had available, accounting for some of the nonlinear trends. This is more of what we expected to see from the beginning of the project, but something that may not be easily captured in a strictly linear relationship.</div>
 <br><br>
-<center>What does this mean?</center>
-This means that our data set is potentially too narrow. Even though we have over 2600 entries, this may not be a large enough sample size to overcome the effects of the designation variable. In a deeper investigation, we may need to gather data from other sources to see if the Designation (which we may term as any sort of job level variable) is a powerful indicator across the board in this industry, or if this is a result of our data selection.
+<div class="header-text"><center>What does this mean?</center></div>
+<div class="main-text">This means that our data set is potentially too narrow. Even though we have over 2600 entries, this may not be a large enough sample size to overcome the effects of the designation variable. In a deeper investigation, we may need to gather data from other sources to see if the Designation (which we may term as any sort of job level variable) is a powerful indicator across the board in this industry, or if this is a result of our data selection.</div>
