@@ -198,6 +198,11 @@ sw_all <- full_model
 
 sw_forward <- step(sw_intercept, direction = 'forward', scope = formula(sw_all), trace = 0)
 sw_forward$anova
+
+#final reduced model
+final_reduced_model <- lm(SALARY ~ DESIGNATION, data = full_model_prep)
+summary(final_reduced_model)
+final_reduced_model
 ```
 
 <div class="main-text">After reviewing the summary statistics of the full model, we can remove the variables Unit, Past Exp, Leaves Used, and Sex because none are statistically significant. For all variables, p > 0.05. We can reduce the model to include only Age and Designation, who are significant because p < 0.05 in the full model. After reducing the model, we see that the only significant variable is Designation - Age now has p > 0.05. After running a stepwise regression to confirm the outputs, our final reduced model only includes the indicator variable Designation.</div>
