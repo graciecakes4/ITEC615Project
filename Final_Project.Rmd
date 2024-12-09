@@ -98,7 +98,70 @@ ggplot(just_salary) +
 Generate relevant data visual plots that explore multicollinearity for the quantitative variables and normality for the quantitative variables as well.  Also, use R code to confirm the levels of the categorical variables.
 
 ```{r final_project2}
+Quantitative_variables <- Salary_Prediction_of_Data_Professions[, c("AGE", "SALARY", "LEAVES.USED", "LEAVES.REMAINING", "RATINGS", "PAST.EXP")]
+
+#Create a correlation matrix
+cor_matrix <- cor(Quantitative_variables, use = "complete.obs")
+
+# Convert the correlation matrix to a data frame
+cor_matrix_df <- as.data.frame(as.table(cor_matrix))
+
+cor_matrix_df$Var1 <- recode(cor_matrix_df$Var1,
+                             "AGE" = "Age",
+                             "SALARY" = "Salary",
+                             "LEAVES.USED" = "Leaves Used",
+                             "LEAVES.REMAINING" = "Leaves Remaining",
+                             "RATINGS" = "Ratings",
+                             "PAST.EXP" = "Past Experience")
+
+cor_matrix_df$Var2 <- recode(cor_matrix_df$Var2,
+                             "AGE" = "Age",
+                             "SALARY" = "Salary",
+                             "LEAVES.USED" = "Leaves Used",
+                             "LEAVES.REMAINING" = "Leaves Remaining",
+                             "RATINGS" = "Ratings",
+                             "PAST.EXP" = "Past Experience")
+
+# Plot the heatmap with renamed variables
+ggplot(cor_matrix_df, aes(Var1, Var2, fill = Freq)) +
+  geom_tile() +  
+  scale_fill_gradient2(low = "purple", high = "black", mid = "gold", midpoint = 0) + 
+  geom_text(aes(label = round(Freq, 2)), color = "white", size = 4) +  
+  labs(title = "Correlation Heatmap of Quantitative Variables") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),  
+        axis.text.y = element_text(angle = 45, hjust = 1))
+
+
+# Create a barplot to explore the distribution of "SALARY"
+ggplot(Salary_Prediction_of_Data_Professions, aes(x = SALARY)) + 
+  geom_histogram(aes(y = ..count../sum(..count..)), bins = 20, fill = "gold", color = "black") + 
+  labs(title = "Distribution of Salary", x = "Salary", y = "Proportion") +
+  scale_x_continuous(labels = scales::comma)
+
+#Convert SEX and UNIT columns into factors
+Salary_Prediction_of_Data_Professions$DESIGNATION <- factor(Salary_Prediction_of_Data_Professions$DESIGNATION)
+Salary_Prediction_of_Data_Professions$SEX <- factor(Salary_Prediction_of_Data_Professions$SEX)
+Salary_Prediction_of_Data_Professions$UNIT <- factor(Salary_Prediction_of_Data_Professions$UNIT)
+
+#Levels of the categorical variables
+levels(Salary_Prediction_of_Data_Professions$DESIGNATION)
+levels(Salary_Prediction_of_Data_Professions$SEX)
+levels(Salary_Prediction_of_Data_Professions$UNIT)
 ```
+<div class="main-text">
+From the correlation matrix we can observe the following regarding multicollinearity: <br>
+- **High Correlations**: There is a strong positive correlation between AGE and PAST.EXP (0.90) and between AGE and SALARY (0.87).<br>
+- **Low Correlations**: Variables like LEAVES.USED and LEAVES.REMAINING have very weak correlations with other variables suggesting they are not problematic for multicollinearity.<br> <br>
+The histogram for SALARY is right-skewed, indicating that most employees earn lower salaries, with fewer employees earning very high salaries. <br> <br>
+On this dataset there are 2 categorical variables, SEX and UNIT <br>
+- **SEX**: Male, Female <br>
+- **UNIT**: Finance, IT, Management, Marketing, Operations, Web <br>
+- **DESIGNATION**: Analyst, Associate, Director, Manager, Senior Analyst, Senior Manager
+</div>
+
+
+
 
 
 ##
