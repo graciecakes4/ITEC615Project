@@ -168,8 +168,17 @@ On this dataset there are 2 categorical variables, SEX and UNIT <br>
 Using R code, produce a full Regression Model that consists of quantitative and categorical variables.  Make use of the R generated dummy variable matrices 
 
 ```{r final_project3}
-```
+contrasts(Salary_Prediction_of_Data_Professions$SEX)  
+contrasts(Salary_Prediction_of_Data_Professions$UNIT)   
+contrasts(Salary_Prediction_of_Data_Professions$DESIGNATION)
 
+# Fit the regression model 
+model <- lm(SALARY ~ AGE + PAST.EXP + SEX + UNIT + DESIGNATION + RATINGS, data = Salary_Prediction_of_Data_Professions)
+model
+```
+<div class="main-text">
+SALARY = 39462.48 + (289.09 × AGE) − (256.60 × PAST.EXP) − (278.91 × SEXM) − (696.35 × UNITIT) − (309.75 × UNITManagement) − (185.85 × UNITMarketing) − (71.72 × UNITOperations) − (528.95 × UNITWeb) + (40992.74 × DESIGNATIONAssociate) + (240269.43 × DESIGNATIONDirector) + (79871.64×DESIGNATIONManager) + (14086.63 × DESIGNATIONSeniorAnalyst) + (132140.19 × DESIGNATIONSeniorManager) − (138.16 × RATINGS)
+</div>
 
 
 # Max's Section
