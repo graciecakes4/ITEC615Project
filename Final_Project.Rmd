@@ -245,6 +245,9 @@ head(fitted)
 
 plot(fitted, residuals)
 abline(h = 0, col = "blue")
+
+quadratic_model <- lm(complete_dataset$SALARY ~ poly(complete_dataset$AGE, 2))
+plot(quadratic_model)
 ```
 
 
@@ -264,16 +267,39 @@ summary(full_model)
 Use procedures and techniques explored in class to produce confidence intervals for the independent quantitative variables of your model. Choose at least two of the quantitative variables to find confidence intervals for.
 
 ```{r final_project6}
-# calculation t scores
-qt(p = 0.025, df = 2632 , lower.tail = FALSE) -> t_score
 
-# calculate Past Exp confidence intervals
-past_exp_UB <- -260.78 + t_score*154.69
-past_exp_LB <- -260.78 - t_score*154.69
+confidence_interval_model <- Salary_Prediction_of_Data_Professions %>% 
+  select(SALARY, AGE, `PAST EXP`)
+
+# Create models for two different quantitative models
+
+conf_model_age <- lm(SALARY ~ AGE, data = confidence_interval_model)
+conf_model_exp <- lm(SALARY ~ `PAST EXP`, data = confidence_interval_model)
+
+# Find b and se
+
+summary(conf_model_age)
+## b = 8232.9, se = 89.96
+summary(conf_model_exp)
+## b = 11543.2, se = 136.9
+
+# Calculate t scores
+t_score <- qt(p = 0.025, df = 2632 , lower.tail = FALSE)
+#t_score 1.96
 
 # calculate Age confidence interval
-age_UB <- 285.76 + t_score*144.59
-age_LB <- 285.76 - t_score*144.59
+age_UB <- 8232.9 + t_score*89.96
+age_LB <- 8232.9 - t_score*89.96
+
+# calculate Past Exp confidence intervals
+past_exp_UB <- 11543.2 + t_score*136.9
+past_exp_LB <- 11543.2 - t_score*136.9
+
+
+age_UB
+age_LB
+past_exp_UB
+past_exp_LB
 ```
 
 # Conie's Section
