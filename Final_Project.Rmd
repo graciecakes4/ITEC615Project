@@ -61,7 +61,37 @@ view(Salary_Prediction_of_Data_Professions)
 ##
 Offer a preliminary description of the data set. For example, indicate the size of the data source, describe the variables, and include any other data profile information that would be of interest.
 
+This dataset provides details about data professionals, including salaries, roles, departments, and more. Useful for salary prediction, trend analysis, and HR analytics.<br>
+  
+  Key variables include:<br>
+  
+  - **FIRST NAME and LAST NAME**: Personal identifiers.<br>
+  - **SEX**: Gender (Male/Female).<br>
+  - **DOJ (Date of Joining)**: Employee’s start date.<br>
+  - **CURRENT DATE**: Snapshot date of the data.<br>
+  - **DESIGNATION**: Job role (e.g., Analyst, Manager).<br>
+  - **AGE**: Employee age.<br>
+  - **SALARY**: Annual salary.<br>
+  - **UNIT**: Department the data professional works in.<br>
+  - **LEAVES USED and LEAVES REMAINING**: Number of leaves taken and left.<br>
+  - **RATINGS**: Performance ratings.<br>
+  - **PAST EXP**: Previous work experience.<br>
+  
 ```{r final_project1}
+just_salary <- Salary_Prediction_of_Data_Professions %>% 
+  select(SALARY) %>% 
+  mutate(salary_in_thousands = SALARY/1000,
+         log_salary = log(SALARY),
+         sqrt_salary = sqrt(SALARY),
+         sqrt_salary_in_thousands = sqrt(salary_in_thousands))
+         
+ggplot(just_salary) +
+  geom_histogram(mapping = aes(x = SALARY), fill = "yellow", color = "black", bins = 40)+
+  ggtitle("Histogram of Salary")
+
+ggplot(just_salary) +
+  geom_histogram(mapping = aes(x = log_salary), fill = "yellow", color = "black", bins = 40)+
+  ggtitle("Histogram of logSalary")
 ```
 
 ##
